@@ -4,7 +4,7 @@ from aws_cdk import (
 )
 from data_platform.data_lake.base import BaseDataLakeBucket, DataLakeLayer
 
-from data_platform import active_environment
+from data_platform.active_environment import active_environment
 
 
 class DataLakeStack(core.Stack):
