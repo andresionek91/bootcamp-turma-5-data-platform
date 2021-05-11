@@ -9,7 +9,7 @@ from aws_cdk import core as cdk
 # being updated to use `cdk`.  You may delete this import if you don't need it.
 from aws_cdk import core
 
-from bootcamp_turma_5_data_platform.bootcamp_turma_5_data_platform_stack import BootcampTurma5DataPlatformStack
+from data_platform.bootcamp_turma_5_data_platform_stack import BootcampTurma5DataPlatformStack
 
 
 app = core.App()
