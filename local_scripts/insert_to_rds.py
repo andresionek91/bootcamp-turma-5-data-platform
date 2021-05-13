@@ -3,6 +3,7 @@ from datetime import datetime
 import os
 from random import choice
 import time
+import uuid
 
 dsn = (
     "dbname={dbname} "
@@ -12,9 +13,9 @@ dsn = (
     "host={host} ".format(
         dbname="orders",
         user="postgres",
-        password="TewUK^=fSBJr,-.vdgm7VIsMvnW8i=",
+        password="LXiM_OPmhE5hBNqHe7HyftQY=y2w1o",
         port=5432,
-        host="rds-develop-orders-db.cmrl9yuykkwg.us-east-1.rds.amazonaws.com",
+        host="rds-production-orders-db.cmaba2mp3qm1.us-east-1.rds.amazonaws.com",
     )
 )
 
@@ -23,9 +24,9 @@ print("connected")
 conn.set_session(autocommit=True)
 cur = conn.cursor()
 cur.execute(
-    "create table if not exists orders_agora_vai("
+    "create table if not exists orders("
     "created_at timestamp,"
-    "order_id integer,"
+    "order_id string,"
     "product_name varchar(100),"
     "value float);"
 )
@@ -39,16 +40,17 @@ products = {
     "borracha": 0.3,
     "iphone": 1000000.00,
 }
-idx = 0
+
 
 while True:
-    print(idx)
-    idx += 1
+    order_id = uuid.uuid4()
     created_at = datetime.now().isoformat()
     product_name, value = choice(list(products.items()))
     cur.execute(
-        f"insert into orders_agora_vai values ('{created_at}', {idx}, '{product_name}', {value})"
+        f"insert into orders values ('{created_at}', {order_id}, '{product_name}', {value})"
     )
+    print(f"insert into orders values ('{created_at}', {order_id}, '{product_name}', {value})")
     time.sleep(0.2)
+
 
 
