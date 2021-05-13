@@ -9,6 +9,7 @@ import json
 
 from common_stack import CommonStack
 from data_platform.data_lake.base import BaseDataLakeBucket
+from data_platform.active_environment import active_environment
 
 
 class RawDMSRole(iam.Role):
@@ -82,10 +83,7 @@ class OrdersDMS(dms.CfnReplicationTask):
                 core.CfnDynamicReferenceService.SECRETS_MANAGER,
                 key=f"{self.common_stack.orders_rds.secret.secret_arn}:SecretString:dbname",
             ).to_string(),
-            port=float(core.CfnDynamicReference(
-                core.CfnDynamicReferenceService.SECRETS_MANAGER,
-                key=f"{self.common_stack.orders_rds.secret.secret_arn}:SecretString:port",
-            ).to_string()),
+            port=5432,
             server_name=self.common_stack.orders_rds.db_instance_endpoint_address,
             extra_connection_attributes="captureDDLs=Y",
         )
@@ -96,7 +94,7 @@ class OrdersDMS(dms.CfnReplicationTask):
             endpoint_type="target",
             engine_name="s3",
             endpoint_identifier=f"dms-target-{self.deploy_env.value}-orders-s3-endpoint",
-            extra_connection_attributes="DataFormat=parquet;maxFileSize=131072;timestampColumnName=extracted_at;includeOpForFullLoad=true",
+            extra_connection_attributes="DataFormat=parquet;maxFileSize=131072;timestampColumnName=extracted_at;includeOpForFullLoad=true;cdcMaxBatchInterval=120",
             s3_settings=dms.CfnEndpoint.S3SettingsProperty(
                 bucket_name=self.data_lake_raw_bucket.bucket_name,
                 bucket_folder="orders",
@@ -178,7 +176,7 @@ class DmsStack(core.Stack):
         data_lake_raw_bucket: BaseDataLakeBucket,
         **kwargs,
     ) -> None:
-        self.deploy_env = scope.deploy_env
+        self.deploy_env = active_environment
         self.data_lake_raw_bucket = data_lake_raw_bucket
         super().__init__(scope, id=f"{self.deploy_env.value}-dms-stack", **kwargs)
 
