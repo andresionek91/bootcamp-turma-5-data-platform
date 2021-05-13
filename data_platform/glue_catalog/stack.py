@@ -7,6 +7,7 @@ from data_platform.glue_catalog.base import (
     BaseDataLakeGlueRole,
     BaseGlueCrawler,
     OrdersTable,
+    OrdersV2Table
 )
 
 
@@ -43,6 +44,13 @@ class GlueCatalogStack(core.Stack):
         self.atomic_events_crawler.node.add_dependency(self.role)
 
         self.orders_table = OrdersTable(
+            self, glue_database=self.raw_database, glue_role=self.role
+        )
+
+        self.orders_table.node.add_dependency(self.raw_database)
+        self.orders_table.node.add_dependency(self.role)
+
+        self.orders_table = OrdersV2Table(
             self, glue_database=self.raw_database, glue_role=self.role
         )
 

@@ -189,3 +189,53 @@ class OrdersTable(glue.Table):
             ],
             **kwargs,
         )
+
+
+class OrdersV2Table(glue.Table):
+    def __init__(
+        self,
+        scope: core.Construct,
+        glue_database: BaseDataLakeGlueDatabase,
+        glue_role: BaseDataLakeGlueRole,
+        **kwargs,
+    ) -> None:
+        self.glue_role = glue_role
+        self.glue_database = glue_database
+        self.deploy_env = self.glue_database.deploy_env
+        self.data_lake_bucket = self.glue_database.data_lake_bucket
+        self.obj_name = f"glue-{self.deploy_env.value}-orders-table"
+        super().__init__(
+            scope,
+            self.obj_name,
+            table_name="orders",
+            description="orders captured from Postgres using DMS CDC",
+            database=self.glue_database,
+            compressed=True,
+            data_format=glue.DataFormat.PARQUET,
+            s3_prefix="orders/public/orders",
+            bucket=self.data_lake_bucket,
+            columns=[
+                glue.Column(
+                    name="op", type=glue.Type(input_string="string", is_primitive=True)
+                ),
+                glue.Column(
+                    name="extracted_at",
+                    type=glue.Type(input_string="string", is_primitive=True),
+                ),
+                glue.Column(
+                    name="created_at",
+                    type=glue.Type(input_string="timestamp", is_primitive=True),
+                ),
+                glue.Column(
+                    name="order_id", type=glue.Type(input_string="string", is_primitive=True)
+                ),
+                glue.Column(
+                    name="product_name",
+                    type=glue.Type(input_string="string", is_primitive=True),
+                ),
+                glue.Column(
+                    name="value", type=glue.Type(input_string="double", is_primitive=True)
+                ),
+            ],
+            **kwargs,
+        )

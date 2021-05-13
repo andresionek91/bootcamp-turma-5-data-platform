@@ -24,9 +24,9 @@ print("connected")
 conn.set_session(autocommit=True)
 cur = conn.cursor()
 cur.execute(
-    "create table if not exists orders("
+    "create table if not exists orders_v2("
     "created_at timestamp,"
-    "order_id string,"
+    "order_id uuid,"
     "product_name varchar(100),"
     "value float);"
 )
@@ -47,9 +47,9 @@ while True:
     created_at = datetime.now().isoformat()
     product_name, value = choice(list(products.items()))
     cur.execute(
-        f"insert into orders values ('{created_at}', {order_id}, '{product_name}', {value})"
+        f"insert into orders_v2 values ('{created_at}', '{order_id}', '{product_name}', {value})"
     )
-    print(f"insert into orders values ('{created_at}', {order_id}, '{product_name}', {value})")
+    print(f"insert into orders values ('{created_at}', '{order_id}', '{product_name}', {value})")
     time.sleep(0.2)
 
 
