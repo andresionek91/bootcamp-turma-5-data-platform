@@ -11,12 +11,10 @@ class AthenaStack(core.Stack):
 
         self.athena_bucket = BaseAthenaBucket(
             self,
-            deploy_env=self.deploy_env
         )
 
         self.athena_workgroup = BaseAthenaWorkgroup(
             self,
-            deploy_env=self.deploy_env,
             athena_bucket=self.athena_bucket,
             gb_scanned_cutoff_per_query=1
         )
