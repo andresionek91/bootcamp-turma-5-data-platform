@@ -8,10 +8,7 @@ class CommonStack(core.Stack):
         self.deploy_env = active_environment
         super().__init__(scope, id=f"{self.deploy_env.value}-common-stack", **kwargs)
 
-        self.custom_vpc = ec2.Vpc(self, f"vpc-{self.deploy_env.value}",
-                                  vpn_gateway=False,
-                                  nat_gateways=0
-                                  )
+        self.custom_vpc = ec2.Vpc(self, f"vpc-{self.deploy_env.value}")
 
         self.orders_rds_sg = ec2.SecurityGroup(
             self,
