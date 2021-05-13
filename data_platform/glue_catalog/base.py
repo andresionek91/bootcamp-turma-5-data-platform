@@ -203,16 +203,16 @@ class OrdersV2Table(glue.Table):
         self.glue_database = glue_database
         self.deploy_env = self.glue_database.deploy_env
         self.data_lake_bucket = self.glue_database.data_lake_bucket
-        self.obj_name = f"glue-{self.deploy_env.value}-ordersv2-table"
+        self.obj_name = f"glue-{self.deploy_env.value}-orders_v2-table"
         super().__init__(
             scope,
             self.obj_name,
-            table_name="orders",
+            table_name="orders_v2",
             description="orders captured from Postgres using DMS CDC",
             database=self.glue_database,
             compressed=True,
             data_format=glue.DataFormat.PARQUET,
-            s3_prefix="orders/public/orders",
+            s3_prefix="orders/public/orders_v2",
             bucket=self.data_lake_bucket,
             columns=[
                 glue.Column(
