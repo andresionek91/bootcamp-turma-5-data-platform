@@ -203,7 +203,7 @@ class OrdersV2Table(glue.Table):
         self.glue_database = glue_database
         self.deploy_env = self.glue_database.deploy_env
         self.data_lake_bucket = self.glue_database.data_lake_bucket
-        self.obj_name = f"glue-{self.deploy_env.value}-orders-table"
+        self.obj_name = f"glue-{self.deploy_env.value}-ordersv2-table"
         super().__init__(
             scope,
             self.obj_name,
