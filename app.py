@@ -7,6 +7,7 @@ from data_platform.kinesis.stack import KinesisStack
 from data_platform.dms.stack import DmsStack
 from data_platform.glue_catalog.stack import GlueCatalogStack
 from data_platform.athena.stack import AthenaStack
+from data_platform.databricks.stack import DatabricksStack
 
 app = core.App()
 data_lake_stack = DataLakeStack(app)
@@ -16,4 +17,5 @@ dms_stack = DmsStack(app, common_stack=common_stack, data_lake_raw_bucket=data_l
 glue_catalog_stack = GlueCatalogStack(app, raw_data_lake_bucket=data_lake_stack.data_lake_raw_bucket,
                                       staged_data_lake_bucket=data_lake_stack.data_lake_raw_staged)
 athena_stack = AthenaStack(app)
+databricks_stack = DatabricksStack(app)
 app.synth()
