@@ -3,7 +3,7 @@ from aws_cdk import (
     aws_iam as iam,
     aws_s3 as s3,
 )
-from data_platform import active_environment
+from data_platform.active_environment import active_environment
 
 
 class DatabricksStack(core.Stack):
@@ -149,8 +149,8 @@ class DatabricksStack(core.Stack):
 
         bucket = s3.Bucket(
             self,
-            id=f"s3-{self.deploy_env.value}-belisco-databricks-bucket",
-            bucket_name=f"s3-{self.deploy_env.value}-belisco-databricks-bucket",
+            id=f"s3-{self.deploy_env.value}-belisco-databricks-bucket-turma-5",
+            bucket_name=f"s3-{self.deploy_env.value}-belisco-databricks-bucket-turma-5",
         )
         bucket.add_to_resource_policy(
             iam.PolicyStatement(
