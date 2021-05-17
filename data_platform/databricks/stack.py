@@ -29,7 +29,8 @@ class DatabricksStack(core.Stack):
             self,
             id=f"iam-{self.deploy_env.value}-databricks-cross-account-role",
             assumed_by=iam.AccountPrincipal(account_id="414351767826"),
-            description=f"Allows databricks access to account",
+            external_ids=['88086fcd-a382-4d73-9ddf-7e12326a3584'],
+            description=f"Allows databricks access to account"
         )
 
         cross_account_policy = iam.Policy(
@@ -39,26 +40,47 @@ class DatabricksStack(core.Stack):
             statements=[
                 iam.PolicyStatement(
                     actions=[
+                        "ec2:AllocateAddress",
+                        "ec2:AssociateDhcpOptions",
                         "ec2:AssociateIamInstanceProfile",
+                        "ec2:AssociateRouteTable",
+                        "ec2:AttachInternetGateway",
                         "ec2:AttachVolume",
                         "ec2:AuthorizeSecurityGroupEgress",
                         "ec2:AuthorizeSecurityGroupIngress",
                         "ec2:CancelSpotInstanceRequests",
+                        "ec2:CreateDhcpOptions",
+                        "ec2:CreateInternetGateway",
                         "ec2:CreateKeyPair",
+                        "ec2:CreateNatGateway",
                         "ec2:CreatePlacementGroup",
+                        "ec2:CreateRoute",
+                        "ec2:CreateRouteTable",
+                        "ec2:CreateSecurityGroup",
+                        "ec2:CreateSubnet",
                         "ec2:CreateTags",
                         "ec2:CreateVolume",
+                        "ec2:CreateVpc",
+                        "ec2:CreateVpcEndpoint",
+                        "ec2:DeleteDhcpOptions",
+                        "ec2:DeleteInternetGateway",
                         "ec2:DeleteKeyPair",
+                        "ec2:DeleteNatGateway",
                         "ec2:DeletePlacementGroup",
+                        "ec2:DeleteRoute",
+                        "ec2:DeleteRouteTable",
+                        "ec2:DeleteSecurityGroup",
+                        "ec2:DeleteSubnet",
                         "ec2:DeleteTags",
                         "ec2:DeleteVolume",
+                        "ec2:DeleteVpc",
+                        "ec2:DeleteVpcEndpoints",
                         "ec2:DescribeAvailabilityZones",
                         "ec2:DescribeIamInstanceProfileAssociations",
                         "ec2:DescribeInstanceStatus",
                         "ec2:DescribeInstances",
                         "ec2:DescribeInternetGateways",
                         "ec2:DescribeNatGateways",
-                        "ec2:DescribeNetworkAcls",
                         "ec2:DescribePlacementGroups",
                         "ec2:DescribePrefixLists",
                         "ec2:DescribeReservedInstancesOfferings",
@@ -68,10 +90,12 @@ class DatabricksStack(core.Stack):
                         "ec2:DescribeSpotPriceHistory",
                         "ec2:DescribeSubnets",
                         "ec2:DescribeVolumes",
-                        "ec2:DescribeVpcAttribute",
                         "ec2:DescribeVpcs",
-                        "ec2:DetachVolume",
+                        "ec2:DetachInternetGateway",
                         "ec2:DisassociateIamInstanceProfile",
+                        "ec2:DisassociateRouteTable",
+                        "ec2:ModifyVpcAttribute",
+                        "ec2:ReleaseAddress",
                         "ec2:ReplaceIamInstanceProfileAssociation",
                         "ec2:RequestSpotInstances",
                         "ec2:RevokeSecurityGroupEgress",
@@ -82,12 +106,15 @@ class DatabricksStack(core.Stack):
                     resources=["*"],
                 ),
                 iam.PolicyStatement(
-                    actions=["iam:CreateServiceLinkedRole", "iam:PutRolePolicy"],
+                    actions=[
+                        "iam:CreateServiceLinkedRole",
+                        "iam:PutRolePolicy"
+                    ],
                     resources=[
                         "arn:aws:iam::*:role/aws-service-role/spot.amazonaws.com/AWSServiceRoleForEC2Spot"
                     ],
                     conditions={
-                        "StringEquals": {"iam:AWSServiceName": "spot.amazonaws.com"}
+                        "StringLike": {"iam:AWSServiceName": "spot.amazonaws.com"}
                     },
                 ),
                 iam.PolicyStatement(

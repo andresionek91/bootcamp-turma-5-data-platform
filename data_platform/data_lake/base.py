@@ -15,7 +15,7 @@ class BaseDataLakeBucket(s3.Bucket):
     def __init__(self, scope: core.Construct, layer: DataLakeLayer, **kwargs):
         self.layer = layer
         self.deploy_env = scope.deploy_env
-        self.obj_name = f's3-belisco-turma-5-{self.deploy_env.value}-data-lake-{self.layer.value}'
+        self.obj_name = f's3-belisquinho-turma-5-{self.deploy_env.value}-data-lake-{self.layer.value}'
 
         super().__init__(
             scope,
