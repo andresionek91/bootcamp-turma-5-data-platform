@@ -185,7 +185,7 @@ class AirflowStack(core.Stack):
             webserver_access_mode="PUBLIC_ONLY",
             weekly_maintenance_window_start="WED:01:00",
             source_bucket_arn=self.bucket.bucket_arn,
-            requirements_s3_path="requirements.txt"
+            requirements_s3_path="requirements.txt",
         )
 
         with ZipFile('data_platform/airflow/resources.zip', 'w') as zipObj2:
