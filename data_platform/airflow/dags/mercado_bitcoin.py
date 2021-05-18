@@ -2,8 +2,6 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.hooks.S3_hook import S3Hook
 import requests
-from backoff import on_exception, constant
-from ratelimit import limits, RateLimitException
 from datetime import datetime
 import logging
 import json
@@ -32,9 +30,6 @@ dag = DAG(
 )
 
 
-@on_exception(constant, RateLimitException, interval=30, max_tries=1)
-@limits(calls=29, period=30)
-@on_exception(constant, requests.exceptions.HTTPError, interval=0.5, max_tries=60)
 def get_daily_summary(date: str, coin: str):
     year, month, day = date.split("-")
     endpoint = (
