@@ -192,9 +192,9 @@ class AirflowStack(core.Stack):
         )
 
         with ZipFile('data_platform/airflow/resources.zip', 'w') as zipObj2:
-            zipObj2.write(_get_abs_path("data_platform/airflow/requirements.txt"), arcname="requirements.txt")
+            zipObj2.write("data_platform/airflow/requirements.txt", arcname="requirements.txt")
             for file in os.listdir("data_platform/airflow/dags"):
-                zipObj2.write(_get_abs_path(f"data_platform/airflow/dags/{file}"), arcname=f"dags/{file}")
+                zipObj2.write(f"data_platform/airflow/dags/{file}", arcname=f"dags/{file}")
 
         s3deploy.BucketDeployment(
             self,
