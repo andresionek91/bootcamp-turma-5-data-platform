@@ -116,49 +116,10 @@ class DatabricksStack(core.Stack):
                     conditions={
                         "StringLike": {"iam:AWSServiceName": "spot.amazonaws.com"}
                     },
-                ),
-                iam.PolicyStatement(
-                    actions=[
-                        "s3:GetBucketNotification",
-                        "s3:PutBucketNotification",
-                        "sns:ListSubscriptionsByTopic",
-                        "sns:GetTopicAttributes",
-                        "sns:SetTopicAttributes",
-                        "sns:CreateTopic",
-                        "sns:TagResource",
-                        "sns:Publish",
-                        "sns:Subscribe",
-                        "sqs:CreateQueue",
-                        "sqs:DeleteMessage",
-                        "sqs:DeleteMessageBatch",
-                        "sqs:ReceiveMessage",
-                        "sqs:SendMessage",
-                        "sqs:GetQueueUrl",
-                        "sqs:GetQueueAttributes",
-                        "sqs:SetQueueAttributes",
-                        "sqs:TagQueue",
-                        "sqs:ChangeMessageVisibility",
-                        "sqs:ChangeMessageVisibilityBatch",
-                    ],
-                    resources=[
-                        f"arn:aws:s3:::s3-belisco-{self.deploy_env.value}-data-lake-*",
-                        f"arn:aws:sqs:{self.region}:{self.account}:databricks-auto-ingest-*",
-                        f"arn:aws:sns:{self.region}:{self.account}:databricks-auto-ingest-*",
-                    ],
-                ),
-                iam.PolicyStatement(
-                    actions=["sqs:ListQueues", "sqs:ListQueueTags", "sns:ListTopics"],
-                    resources=["*"],
-                ),
-                iam.PolicyStatement(
-                    actions=["sns:Unsubscribe", "sns:DeleteTopic", "sqs:DeleteQueue"],
-                    resources=[
-                        f"arn:aws:sqs:{self.region}:{self.account}:databricks-auto-ingest-*",
-                        f"arn:aws:sns:{self.region}:{self.account}:databricks-auto-ingest-*",
-                    ],
-                ),
+                )
             ],
         )
+
         cross_account_role.attach_inline_policy(cross_account_policy)
 
         bucket = s3.Bucket(
