@@ -6,10 +6,9 @@ from aws_cdk import (
 
 
 class BaseAthenaBucket(s3.Bucket):
-
     def __init__(self, scope: core.Construct, **kwargs) -> None:
         self.deploy_env = scope.deploy_env
-        self.obj_name = f's3-belisquinho-{self.deploy_env.value}-data-lake-athena-results'
+        self.obj_name = f"s3-belisquinho-{self.deploy_env.value}-data-lake-athena-results"
 
         super().__init__(
             scope,
@@ -19,12 +18,10 @@ class BaseAthenaBucket(s3.Bucket):
             block_public_access=self.default_block_public_access(),
             encryption=self.default_encryption(),
             versioned=True,
-            **kwargs
+            **kwargs,
         )
 
-        self.add_lifecycle_rule(
-            expiration=core.Duration.days(60)
-        )
+        self.add_lifecycle_rule(expiration=core.Duration.days(60))
 
     @staticmethod
     def default_block_public_access():
@@ -35,7 +32,7 @@ class BaseAthenaBucket(s3.Bucket):
             block_public_acls=True,
             block_public_policy=True,
             ignore_public_acls=True,
-            restrict_public_buckets=True
+            restrict_public_buckets=True,
         )
         return block_public_access
 
@@ -49,21 +46,26 @@ class BaseAthenaBucket(s3.Bucket):
 
 
 class BaseAthenaWorkgroup(athena.CfnWorkGroup):
-
-    def __init__(self, scope: core.Construct, athena_bucket: BaseAthenaBucket, gb_scanned_cutoff_per_query: int, **kwargs) -> None:
+    def __init__(
+        self,
+        scope: core.Construct,
+        athena_bucket: BaseAthenaBucket,
+        gb_scanned_cutoff_per_query: int,
+        **kwargs,
+    ) -> None:
         self.gb_scanned_cutoff_per_query = gb_scanned_cutoff_per_query
         self.deploy_env = scope.deploy_env
         self.athena_bucket = athena_bucket
-        self.obj_name = f's3-belisco-{self.deploy_env.value}-data-lake-athena-workgroup'
+        self.obj_name = f"s3-belisco-{self.deploy_env.value}-data-lake-athena-workgroup"
         super().__init__(
             scope,
             id=self.obj_name,
             name=self.obj_name,
-            description='Workgroup padrao para execucao de queries',
+            description="Workgroup padrao para execucao de queries",
             recursive_delete_option=True,
-            state='ENABLED',
+            state="ENABLED",
             work_group_configuration=self.default_workgroup_configuration,
-            **kwargs
+            **kwargs,
         )
 
     @property
@@ -72,14 +74,16 @@ class BaseAthenaWorkgroup(athena.CfnWorkGroup):
             bytes_scanned_cutoff_per_query=self.bytes_scanned_cutoff_per_query,
             enforce_work_group_configuration=True,
             publish_cloud_watch_metrics_enabled=True,
-            result_configuration=self.default_result_configuration
+            result_configuration=self.default_result_configuration,
         )
 
     @property
     def default_result_configuration(self):
         return athena.CfnWorkGroup.ResultConfigurationProperty(
-            encryption_configuration=athena.CfnWorkGroup.EncryptionConfigurationProperty(encryption_option='SSE_S3'),
-            output_location=f's3://{self.athena_bucket.bucket_name}'
+            encryption_configuration=athena.CfnWorkGroup.EncryptionConfigurationProperty(
+                encryption_option="SSE_S3"
+            ),
+            output_location=f"s3://{self.athena_bucket.bucket_name}",
         )
 
     @property

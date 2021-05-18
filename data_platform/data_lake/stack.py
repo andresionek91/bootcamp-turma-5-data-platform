@@ -10,33 +10,24 @@ from data_platform.active_environment import active_environment
 class DataLakeStack(core.Stack):
     def __init__(self, scope: core.Construct, **kwargs) -> None:
         self.deploy_env = active_environment
-        super().__init__(scope, id=f'{self.deploy_env.value}-data-lake-stack', **kwargs)
+        super().__init__(scope, id=f"{self.deploy_env.value}-data-lake-stack", **kwargs)
 
-        self.data_lake_raw_bucket = BaseDataLakeBucket(
-            self,
-            layer=DataLakeLayer.RAW
-        )
+        self.data_lake_raw_bucket = BaseDataLakeBucket(self, layer=DataLakeLayer.RAW)
 
         self.data_lake_raw_bucket.add_lifecycle_rule(
             transitions=[
                 s3.Transition(
                     storage_class=s3.StorageClass.INTELLIGENT_TIERING,
-                    transition_after=core.Duration.days(90)
+                    transition_after=core.Duration.days(90),
                 ),
                 s3.Transition(
                     storage_class=s3.StorageClass.GLACIER,
-                    transition_after=core.Duration.days(360)
-                )
+                    transition_after=core.Duration.days(360),
+                ),
             ],
-            enabled=True
+            enabled=True,
         )
 
-        self.data_lake_raw_staged = BaseDataLakeBucket(
-            self,
-            layer=DataLakeLayer.STAGED
-        )
+        self.data_lake_raw_staged = BaseDataLakeBucket(self, layer=DataLakeLayer.STAGED)
 
-        self.data_lake_raw_curated = BaseDataLakeBucket(
-            self,
-            layer=DataLakeLayer.CURATED
-        )
+        self.data_lake_raw_curated = BaseDataLakeBucket(self, layer=DataLakeLayer.CURATED)

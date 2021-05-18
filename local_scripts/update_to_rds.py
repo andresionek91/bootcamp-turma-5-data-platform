@@ -1,8 +1,4 @@
 import psycopg2
-from datetime import datetime
-import os
-from random import choice
-import time
 
 dsn = (
     "dbname={dbname} "
@@ -23,6 +19,4 @@ print("connected")
 conn.set_session(autocommit=True)
 cur = conn.cursor()
 
-cur.execute(
-    f"update orders_agora_vai set value = 0.5 where order_id=988"
-)
+cur.execute(f"update orders_agora_vai set value = 0.5 where order_id=988")

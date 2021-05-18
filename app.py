@@ -13,14 +13,25 @@ from data_platform.airflow.stack import AirflowStack
 app = core.App()
 data_lake_stack = DataLakeStack(app)
 common_stack = CommonStack(app)
-kinesis_stack = KinesisStack(app, data_lake_raw_bucket=data_lake_stack.data_lake_raw_bucket)
-dms_stack = DmsStack(app, common_stack=common_stack, data_lake_raw_bucket=data_lake_stack.data_lake_raw_bucket)
-glue_catalog_stack = GlueCatalogStack(app, raw_data_lake_bucket=data_lake_stack.data_lake_raw_bucket,
-                                      staged_data_lake_bucket=data_lake_stack.data_lake_raw_staged)
+kinesis_stack = KinesisStack(
+    app, data_lake_raw_bucket=data_lake_stack.data_lake_raw_bucket
+)
+dms_stack = DmsStack(
+    app,
+    common_stack=common_stack,
+    data_lake_raw_bucket=data_lake_stack.data_lake_raw_bucket,
+)
+glue_catalog_stack = GlueCatalogStack(
+    app,
+    raw_data_lake_bucket=data_lake_stack.data_lake_raw_bucket,
+    staged_data_lake_bucket=data_lake_stack.data_lake_raw_staged,
+)
 athena_stack = AthenaStack(app)
 databricks_stack = DatabricksStack(app)
-airflow_stack = AirflowStack(app, data_lake_raw_bucket=data_lake_stack.data_lake_raw_bucket, common_stack=common_stack)
+airflow_stack = AirflowStack(
+    app,
+    data_lake_raw_bucket=data_lake_stack.data_lake_raw_bucket,
+    common_stack=common_stack,
+)
 
 app.synth()
-
-

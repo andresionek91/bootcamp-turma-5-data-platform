@@ -137,7 +137,7 @@ class BaseGlueCrawler(glue.CfnCrawler):
                 glue.CfnCrawler.S3TargetProperty(
                     path=f"s3://{self.data_lake_bucket.bucket_name}/{self.table_name}"
                 ),
-             ]
+            ]
         )
 
 
@@ -227,7 +227,8 @@ class OrdersV2Table(glue.Table):
                     type=glue.Type(input_string="timestamp", is_primitive=True),
                 ),
                 glue.Column(
-                    name="order_id", type=glue.Type(input_string="string", is_primitive=True)
+                    name="order_id",
+                    type=glue.Type(input_string="string", is_primitive=True),
                 ),
                 glue.Column(
                     name="product_name",

@@ -7,13 +7,17 @@ from data_platform.glue_catalog.base import (
     BaseDataLakeGlueRole,
     BaseGlueCrawler,
     OrdersTable,
-    OrdersV2Table
+    OrdersV2Table,
 )
 
 
 class GlueCatalogStack(core.Stack):
     def __init__(
-        self, scope: core.Construct, raw_data_lake_bucket: BaseDataLakeBucket, staged_data_lake_bucket: BaseDataLakeBucket, **kwargs
+        self,
+        scope: core.Construct,
+        raw_data_lake_bucket: BaseDataLakeBucket,
+        staged_data_lake_bucket: BaseDataLakeBucket,
+        **kwargs,
     ) -> None:
         self.raw_data_lake_bucket = raw_data_lake_bucket
         self.processed_data_lake_bucket = staged_data_lake_bucket

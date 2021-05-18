@@ -29,8 +29,8 @@ class DatabricksStack(core.Stack):
             self,
             id=f"iam-{self.deploy_env.value}-databricks-cross-account-role",
             assumed_by=iam.AccountPrincipal(account_id="414351767826"),
-            external_ids=['13485930-07cc-4635-ad2e-a51a2ad87c26'],
-            description=f"Allows databricks access to account"
+            external_ids=["13485930-07cc-4635-ad2e-a51a2ad87c26"],
+            description=f"Allows databricks access to account",
         )
 
         cross_account_policy = iam.Policy(
@@ -101,22 +101,19 @@ class DatabricksStack(core.Stack):
                         "ec2:RevokeSecurityGroupEgress",
                         "ec2:RevokeSecurityGroupIngress",
                         "ec2:RunInstances",
-                        "ec2:TerminateInstances"
+                        "ec2:TerminateInstances",
                     ],
                     resources=["*"],
                 ),
                 iam.PolicyStatement(
-                    actions=[
-                        "iam:CreateServiceLinkedRole",
-                        "iam:PutRolePolicy"
-                    ],
+                    actions=["iam:CreateServiceLinkedRole", "iam:PutRolePolicy"],
                     resources=[
                         "arn:aws:iam::*:role/aws-service-role/spot.amazonaws.com/AWSServiceRoleForEC2Spot"
                     ],
                     conditions={
                         "StringLike": {"iam:AWSServiceName": "spot.amazonaws.com"}
                     },
-                )
+                ),
             ],
         )
 

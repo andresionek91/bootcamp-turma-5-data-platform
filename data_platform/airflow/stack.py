@@ -5,7 +5,7 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_s3 as s3,
     aws_iam as iam,
-    aws_s3_deployment as s3deploy
+    aws_s3_deployment as s3deploy,
 )
 
 from common_stack import CommonStack
@@ -33,13 +33,15 @@ class AirflowStack(core.Stack):
             id=f"{self.deploy_env.value}-airflow-log-group",
             log_group_name=f"{self.deploy_env.value}-airflow-log-group",
             retention=logs.RetentionDays.THREE_MONTHS,
-            removal_policy=core.RemovalPolicy.DESTROY
+            removal_policy=core.RemovalPolicy.DESTROY,
         )
 
-        self.logging_configuration = mwaa.CfnEnvironment.ModuleLoggingConfigurationProperty(
-            cloud_watch_log_group_arn=self.log_group.log_group_arn,
-            enabled=True,
-            log_level="WARNING"
+        self.logging_configuration = (
+            mwaa.CfnEnvironment.ModuleLoggingConfigurationProperty(
+                cloud_watch_log_group_arn=self.log_group.log_group_arn,
+                enabled=True,
+                log_level="WARNING",
+            )
         )
 
         self.security_group = ec2.SecurityGroup(
@@ -59,7 +61,7 @@ class AirflowStack(core.Stack):
             id=f"s3-{self.deploy_env.value}-belisco-airflow",
             bucket_name=f"s3-{self.deploy_env.value}-belisquinho-airflow",
             removal_policy=core.RemovalPolicy.DESTROY,
-            block_public_access=s3.BlockPublicAccess.BLOCK_ALL
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
         )
 
         self.execution_role = iam.Role(
@@ -69,7 +71,11 @@ class AirflowStack(core.Stack):
             assumed_by=iam.ServicePrincipal("airflow.amazonaws.com"),
         )
         self.execution_role.assume_role_policy.add_statements(
-            iam.PolicyStatement(principals=[iam.ServicePrincipal("airflow-env.amazonaws.com")], actions=["sts:AssumeRole"]))
+            iam.PolicyStatement(
+                principals=[iam.ServicePrincipal("airflow-env.amazonaws.com")],
+                actions=["sts:AssumeRole"],
+            )
+        )
 
         self.execution_policy = iam.Policy(
             self,
@@ -90,31 +96,23 @@ class AirflowStack(core.Stack):
                     ],
                 ),
                 iam.PolicyStatement(
-                    actions=[
-                        "airflow:PublishMetrics"
-                    ],
+                    actions=["airflow:PublishMetrics"],
                     resources=[
                         f"arn:aws:airflow:{self.region}:{self.account}:environment/{self.deploy_env.value}-airflow"
                     ],
                 ),
                 iam.PolicyStatement(
-                    actions=[
-                        "airflow:PublishMetrics"
-                    ],
+                    actions=["airflow:PublishMetrics"],
                     resources=[
                         f"arn:aws:airflow:{self.region}:{self.account}:environment/{self.deploy_env.value}-airflow"
                     ],
                 ),
                 iam.PolicyStatement(
-                    actions=[
-                        "s3:GetObject*",
-                        "s3:GetBucket*",
-                        "s3:List*"
-                    ],
+                    actions=["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
                     resources=[
                         f"{self.bucket.bucket_arn}/*",
-                        f"{self.bucket.bucket_arn}"
-                    ]
+                        f"{self.bucket.bucket_arn}",
+                    ],
                 ),
                 iam.PolicyStatement(
                     actions=[
@@ -124,24 +122,16 @@ class AirflowStack(core.Stack):
                         "logs:GetLogEvents",
                         "logs:GetLogRecord",
                         "logs:GetLogGroupFields",
-                        "logs:GetQueryResults"
+                        "logs:GetQueryResults",
                     ],
                     resources=[
                         self.log_group.log_group_arn,
                         f"{self.log_group.log_group_arn}*",
-                    ]
-                ),
-                iam.PolicyStatement(
-                    actions=[
-                        "logs:DescribeLogGroups"
                     ],
-                    resources=["*"]
                 ),
+                iam.PolicyStatement(actions=["logs:DescribeLogGroups"], resources=["*"]),
                 iam.PolicyStatement(
-                    actions=[
-                        "cloudwatch:PutMetricData"
-                    ],
-                    resources=["*"]
+                    actions=["cloudwatch:PutMetricData"], resources=["*"]
                 ),
                 iam.PolicyStatement(
                     actions=[
@@ -150,12 +140,10 @@ class AirflowStack(core.Stack):
                         "sqs:GetQueueAttributes",
                         "sqs:GetQueueUrl",
                         "sqs:ReceiveMessage",
-                        "sqs:SendMessage"
+                        "sqs:SendMessage",
                     ],
-                    resources=[
-                        f"arn:aws:sqs:{self.region}:*:airflow-celery-*"
-                    ]
-                )
+                    resources=[f"arn:aws:sqs:{self.region}:*:airflow-celery-*"],
+                ),
             ],
         )
 
@@ -174,13 +162,16 @@ class AirflowStack(core.Stack):
                 scheduler_logs=self.logging_configuration,
                 task_logs=self.logging_configuration,
                 webserver_logs=self.logging_configuration,
-                worker_logs=self.logging_configuration
+                worker_logs=self.logging_configuration,
             ),
             max_workers=2,
             min_workers=1,
             network_configuration=mwaa.CfnEnvironment.NetworkConfigurationProperty(
                 security_group_ids=[self.security_group.security_group_id],
-                subnet_ids=[subnet.subnet_id for subnet in self.common_stack.custom_vpc.private_subnets]
+                subnet_ids=[
+                    subnet.subnet_id
+                    for subnet in self.common_stack.custom_vpc.private_subnets
+                ],
             ),
             webserver_access_mode="PUBLIC_ONLY",
             weekly_maintenance_window_start="WED:01:00",
@@ -188,14 +179,18 @@ class AirflowStack(core.Stack):
             requirements_s3_path="requirements.txt",
         )
 
-        with ZipFile('data_platform/airflow/resources.zip', 'w') as zipObj2:
-            zipObj2.write("data_platform/airflow/requirements.txt", arcname="requirements.txt")
+        with ZipFile("data_platform/airflow/resources.zip", "w") as zipObj2:
+            zipObj2.write(
+                "data_platform/airflow/requirements.txt", arcname="requirements.txt"
+            )
             for file in os.listdir("data_platform/airflow/dags"):
-                zipObj2.write(f"data_platform/airflow/dags/{file}", arcname=f"dags/{file}")
+                zipObj2.write(
+                    f"data_platform/airflow/dags/{file}", arcname=f"dags/{file}"
+                )
 
         s3deploy.BucketDeployment(
             self,
             id=f"{self.deploy_env.value}-belisquinho-airflow-content",
             destination_bucket=self.bucket,
-            sources=[s3deploy.Source.asset("data_platform/airflow/resources.zip")]
+            sources=[s3deploy.Source.asset("data_platform/airflow/resources.zip")],
         )
