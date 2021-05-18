@@ -13,7 +13,7 @@ dsn = (
     "host={host} ".format(
         dbname="orders",
         user="postgres",
-        password="LXiM_OPmhE5hBNqHe7HyftQY=y2w1o",
+        password="^_LFVyTgTQZXFlOSbp2R9z4LuG^ib1",
         port=5432,
         host="rds-production-orders-db.cmaba2mp3qm1.us-east-1.rds.amazonaws.com",
     )
@@ -51,6 +51,3 @@ while True:
     )
     print(f"insert into orders values ('{created_at}', '{order_id}', '{product_name}', {value})")
     time.sleep(0.2)
-
-
-
