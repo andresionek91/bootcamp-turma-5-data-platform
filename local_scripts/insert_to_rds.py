@@ -26,7 +26,7 @@ cur = conn.cursor()
 cur.execute(
     "create table if not exists orders_v2("
     "created_at timestamp,"
-    "order_id uuid,"
+    "order_id uuid PRIMARY KEY,"
     "product_name varchar(100),"
     "value float);"
 )

@@ -15,10 +15,6 @@ import os
 from zipfile import ZipFile
 
 
-def _get_abs_path(path):
-    return os.path.join(os.path.dirname(os.path.realpath(__file__)), path)
-
-
 class AirflowStack(core.Stack):
     def __init__(
         self,

@@ -163,8 +163,8 @@ class DatabricksStack(core.Stack):
 
         bucket = s3.Bucket(
             self,
-            id=f"s3-{self.deploy_env.value}-belisco-databricks-bucket-turma-5",
-            bucket_name=f"s3-{self.deploy_env.value}-belisco-databricks-bucket-turma-5",
+            id=f"s3-{self.deploy_env.value}-belisquinho-databricks-bucket-turma-5",
+            bucket_name=f"s3-{self.deploy_env.value}-belisquinho-databricks-bucket-turma-5",
         )
         bucket.add_to_resource_policy(
             iam.PolicyStatement(
