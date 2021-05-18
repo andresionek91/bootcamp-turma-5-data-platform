@@ -1,3 +1,4 @@
+--constraint "https://raw.githubusercontent.com/apache/airflow/constraints-1.10.12/constraints-3.7.txt"
 toolz
 pandas
 requests==2.25.1
