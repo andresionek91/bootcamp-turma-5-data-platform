@@ -1,2 +1,5 @@
 toolz
 pandas
+requests
+backoff
+ratelimit
