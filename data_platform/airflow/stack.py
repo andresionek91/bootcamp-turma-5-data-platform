@@ -198,7 +198,7 @@ class AirflowStack(core.Stack):
 
         s3deploy.BucketDeployment(
             self,
-            id=f"{self.deploy_env.value}-airflow-content",
+            id=f"{self.deploy_env.value}-belisquinho-airflow-content",
             destination_bucket=self.bucket,
             sources=[s3deploy.Source.asset(_get_abs_path("data_platform/airflow/resources.zip"))]
         )
