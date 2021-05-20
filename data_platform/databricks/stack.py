@@ -161,8 +161,8 @@ class DatabricksStack(core.Stack):
                         "s3:PutObjectAcl",
                     ],
                     resources=[
-                        f"arn:aws:s3:::s3-belisco-turma-4-{self.deploy_env.value}-data-lake-*",
-                        f"arn:aws:s3:::s3-belisco-turma-4-{self.deploy_env.value}-data-lake-*/*",
+                        f"arn:aws:s3:::s3-belisquito-turma-5-{self.deploy_env.value}-data-lake-*",
+                        f"arn:aws:s3:::s3-belisquito-turma-5-{self.deploy_env.value}-data-lake-*/*",
                     ],
                 ),
                 iam.PolicyStatement(
