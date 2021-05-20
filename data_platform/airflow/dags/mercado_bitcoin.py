@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 config = {
-    "bucket": "s3-belisquinho-turma-5-production-data-lake-raw",
+    "bucket": "s3-belisquito-turma-5-production-data-lake-raw",
     "coins": ["BCH", "BTC", "ETH", "LTC"],
 }
 

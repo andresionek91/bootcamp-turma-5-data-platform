@@ -59,7 +59,7 @@ class AirflowStack(core.Stack):
         self.bucket = s3.Bucket(
             self,
             id=f"s3-{self.deploy_env.value}-belisco-airflow",
-            bucket_name=f"s3-{self.deploy_env.value}-belisquinho-airflow",
+            bucket_name=f"s3-{self.deploy_env.value}-belisquito-airflow",
             removal_policy=core.RemovalPolicy.DESTROY,
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
         )
@@ -190,7 +190,7 @@ class AirflowStack(core.Stack):
 
         s3deploy.BucketDeployment(
             self,
-            id=f"{self.deploy_env.value}-belisquinho-airflow-content",
+            id=f"{self.deploy_env.value}-belisquito-airflow-content",
             destination_bucket=self.bucket,
             sources=[s3deploy.Source.asset("data_platform/airflow/resources.zip")],
         )

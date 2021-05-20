@@ -8,7 +8,7 @@ from aws_cdk import (
 class BaseAthenaBucket(s3.Bucket):
     def __init__(self, scope: core.Construct, **kwargs) -> None:
         self.deploy_env = scope.deploy_env
-        self.obj_name = f"s3-belisquinho-{self.deploy_env.value}-data-lake-athena-results"
+        self.obj_name = f"s3-belisquito-{self.deploy_env.value}-data-lake-athena-results"
 
         super().__init__(
             scope,

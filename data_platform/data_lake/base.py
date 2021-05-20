@@ -16,7 +16,7 @@ class BaseDataLakeBucket(s3.Bucket):
         self.layer = layer
         self.deploy_env = scope.deploy_env
         self.obj_name = (
-            f"s3-belisquinho-turma-5-{self.deploy_env.value}-data-lake-{self.layer.value}"
+            f"s3-belisquito-turma-5-{self.deploy_env.value}-data-lake-{self.layer.value}"
         )
 
         super().__init__(
