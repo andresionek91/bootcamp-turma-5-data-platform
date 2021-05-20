@@ -66,7 +66,7 @@ class AirflowStack(core.Stack):
 
         self.execution_role = iam.Role(
             self,
-            id=f"iam-{self.deploy_env.value}-data-lake-raw-dms-role",
+            id=f"iam-{self.deploy_env.value}-data-lake-raw-airflow-role",
             description="Role to allow Airflow to access resources",
             assumed_by=iam.ServicePrincipal("airflow.amazonaws.com"),
         )
