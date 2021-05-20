@@ -179,6 +179,11 @@ class AirflowStack(core.Stack):
             requirements_s3_path="requirements.txt",
         )
 
+        self.airflow.node.add_dependency(self.execution_role)
+        self.airflow.node.add_dependency(self.logging_configuration)
+        self.airflow.node.add_dependency(self.security_group)
+        self.airflow.node.add_dependency(self.bucket)
+
         with ZipFile("data_platform/airflow/resources.zip", "w") as zipObj2:
             zipObj2.write(
                 "data_platform/airflow/requirements.txt", arcname="requirements.txt"
