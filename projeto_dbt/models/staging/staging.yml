@@ -1,0 +1,20 @@
+version: 2
+
+sources:
+  - name: data_lake_raw
+    schema: data_lake_raw
+    loader: kinesis
+
+    tables:
+      - name: atomic_events
+        identifier: atomic_events
+        description: '{{ doc("source_atomic_events") }}'
+        column:
+          - name: event_id
+            description: Id do evento
+            tests:
+              - not_null
+          - name: event_timestamp
+            description: Timestamp em que o evento ocorreu
+            tests:
+              - not_null
